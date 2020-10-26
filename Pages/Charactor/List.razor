@@ -1,0 +1,103 @@
+@page "/charactor/list"
+@using BlazorWebAssemblySample.Models;
+@inject HttpClient Http
+
+<h1>Charactor</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (charactors == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p class="text-right">
+        <a class="btn btn-primary" href="/charactor/add"><span style="display: inline-flex, alignItems: center">&#8203;<span
+                class="oi oi-plus" aria-hidden="true"></span></span> 新增</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>HitPoints</th>
+                <th>Strength</th>
+                <th>Defense</th>
+                <th>Intelligence</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var charactor in charactors)
+            {
+                <tr>
+                    <td>@charactor.Id</td>
+                    <td>@charactor.Name</td>
+                    <td>@charactor.HitPoints</td>
+                    <td>@charactor.Strength</td>
+                    <td>@charactor.Defense</td>
+                    <td>@charactor.Intelligence</td>
+                    <td>@charactor.Class</td>
+                    <td>
+                        <a class="btn btn-primary" href="/charactor/modify/@charactor.Id"><span class="oi oi-pencil"
+                            aria-hidden="true"></span> 修改</a>
+                        <span> </span>
+                        <a class="btn btn-danger" href="/charactor/delete/@charactor.Id"><span class="oi oi-circle-x"
+                            aria-hidden="true"></span> 删除</a>
+                    </td>
+                    @* public int Id { get; set; }
+                        public string Name { get; set; } = "Frodo";
+                        public int HitPoints { get; set; } = 100;
+                        public int Strength { get; set; } = 10;
+                        public int Defense { get; set; } = 10;
+                        public int Intelligence { get; set; } = 10;
+                        public RpgClass Class { get; set; } = RpgClass.Knight; *@
+                    @* <td>@forecast.Date.ToShortDateString()</td> *@
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Response<List<Charactor>> responseCharactor;
+    private List<Charactor> charactors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        responseCharactor = await Http.GetFromJsonAsync<Response<List<Charactor>>>("/charactor/getall");
+        if (responseCharactor.Success)
+        {
+            charactors = responseCharactor.Data;
+        }
+    }
+
+    @* public class WeatherForecast
+        {
+        public DateTime Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        } *@
+    @* public class Charactor
+        {
+        public int Id { get; set; }
+        public string Name { get; set; } = "Frodo";
+        public int HitPoints { get; set; } = 100;
+        public int Strength { get; set; } = 10;
+        public int Defense { get; set; } = 10;
+        public int Intelligence { get; set; } = 10;
+        public RpgClass Class { get; set; } = RpgClass.Knight;
+        }
+
+        public enum RpgClass
+        {
+        Knight = 1,
+        Mage = 2,
+        Cleric = 3
+        } *@
+}

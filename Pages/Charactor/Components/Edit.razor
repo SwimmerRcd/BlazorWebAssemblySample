@@ -1,0 +1,11 @@
+@using BlazorWebAssemblySample.Models;
+<EditForm Model="@model" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <InputText id="id" @bind-value="model.Id" />
+    <button type="submit">Submit</button>
+</EditForm>
+@code {
+    Charactor model = new Charactor();
+}
